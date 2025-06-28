@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  memo-transcriber:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: memo-transcriber
+    ports:
+      - 5000:5000
+    env_file: ./.env
+    restart: unless-stopped

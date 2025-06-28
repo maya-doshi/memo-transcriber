@@ -1,19 +1,21 @@
 import time
 import tempfile
 import gc
+import os
 
 from flask import Flask, request, jsonify
 
 from memos import Memos, norm_name
 from transcribe import Transcriber
 
-MODEL_SIZE = 'large-v3'
-BASE_URL = ""
-TOKEN = ''
+MODEL_SIZE = os.environ['MODEL_SIZE']
+BASE_URL = os.environ['BASE_URL']
+TOKEN = os.environ['TOKEN']
+PORT = os.environ['PORT']
+
 TAG_INCLUDE = [ 'vlog', 'log', 'voice', 'voice_note' ]
 TAG_EXCLUDE = [ 'wrct' ]
 RESOURCE_TYPES = [ 'audio', 'video' ]
-PORT = 5000
 
 WEBHOOK_UPDATE =  [ 'memos.memo.created', 'memos.memo.updated' ]
 
