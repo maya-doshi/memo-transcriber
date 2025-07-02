@@ -20,8 +20,9 @@ def has_not_tag(memo):
 def get_transcripts(desc):
   return dict(map(lambda x: x.split('\n', 1), filter(lambda x: len(x) > 1, desc.split('```'))))
 
+# this should really be a regex lol
 def norm_name(name):
-  return name.replace(' ', '_').replace('.', '_').replace('-', '_')
+  return name.replace(' ', '_').replace('.', '_').replace('-', '_').replace("'", '_').replace('__', '_')
 
 def gen_desc(transcripts):
   final = ""
