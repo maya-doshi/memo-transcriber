@@ -5,7 +5,7 @@ import os
 
 from flask import Flask, request, jsonify
 
-from memos import Memos, norm_name
+from memos import Memos, sanitize_name
 from transcribe import Transcriber
 
 MODEL_SIZE = os.environ['MODEL_SIZE']
@@ -58,7 +58,7 @@ def webhook():
     # - [ ] function so it's not repeated
     # - [ ] possible to update transcript if model is different
     for r in rs:
-      transcript = transcripts.get(norm_name(r['filename']), None)
+      transcript = transcripts.get(sanitize_name(r['filename']), None)
       if transcript is None:
         transcribe_resource(r)
   return jsonify({'status': 'success'})

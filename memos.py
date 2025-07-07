@@ -1,5 +1,7 @@
-import requests as rq
+import re
 import os
+
+import requests as rq
 
 API_EP = '/api/v1/'
 MEMO_LIST_EP = f"{API_EP}memos?pageSize=50000"
@@ -20,9 +22,8 @@ def has_not_tag(memo):
 def get_transcripts(desc):
   return dict(map(lambda x: x.split('\n', 1), filter(lambda x: len(x) > 1, desc.split('```'))))
 
-# this should really be a regex lol
-def norm_name(name):
-  return name.replace(' ', '_').replace('.', '_').replace('-', '_').replace("'", '_').replace('__', '_')
+def sanitize_name(name):
+  return re.sub(r"[ .\-\'#\[\]\(\)]+", "_", name)
 
 def gen_desc(transcripts):
   final = ""
@@ -75,7 +76,7 @@ class Memos:
     url = f'{self.base_url}{API_EP}{memo["name"]}'
 
     transcripts = self.get_existing_transcripts(memo)
-    transcripts[norm_name(resource['filename'])] = transcript
+    transcripts[sanitize_name(resource['filename'])] = transcript
     splitted = memo["content"].split(self.delim)
     json = { 'content': f'{splitted[0]}{self.delim}{gen_desc(transcripts)}', }
 
